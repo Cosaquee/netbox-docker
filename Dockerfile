@@ -14,14 +14,13 @@ RUN apk add --no-cache \
       openssl-dev \
       postgresql-dev \
       wget \
-  && pip install gunicorn==17.5 django-auth-ldap
+      unzip && pip install gunicorn==17.5 django-auth-ldap
 
 WORKDIR /opt
 
-ARG BRANCH=v2-beta
-ARG URL=https://github.com/digitalocean/netbox/archive/$BRANCH.tar.gz
-RUN wget -q -O - "${URL}" | tar xz \
-  && ln -s netbox* netbox
+ARG BRANCH=2.1.3
+ARG URL=https://github.com/digitalocean/netbox/archive/v$BRANCH.zip
+RUN wget -q "${URL}" &&  unzip -q v$BRANCH.zip && mv netbox-$BRANCH netbox
 
 WORKDIR /opt/netbox
 RUN pip install -r requirements.txt
